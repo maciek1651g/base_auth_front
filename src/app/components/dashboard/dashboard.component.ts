@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpService } from '../../http.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,18 +7,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+  imageData: string | undefined;
+
+  constructor(private httpService: HttpService) {}
+
   logout() {
-    // Implementacja logiki wylogowania
-    console.log('Wylogowano');
+    this.httpService.logout().subscribe((response: any) => {
+      console.log(response);
+    });
   }
 
-  generateOTP() {
-    // Implementacja logiki generowania kodu jednorazowego
-    console.log('Generowanie kodu jednorazowego');
+  registerOTP() {
+    this.httpService.registerOTP().subscribe((response: any) => {
+      this.imageData = response.imageData;
+      console.log(response);
+    });
   }
 
-  u2fAuthentication() {
-    // Implementacja logiki autoryzacji U2F
-    console.log('Autoryzacja U2F');
+  u2fRegistration() {
+    this.httpService.registerU2FStart();
+  }
+
+  u2fVerification() {
+    this.httpService.verifyU2Start();
   }
 }

@@ -8,15 +8,24 @@ import { RegistrationPageComponent } from './components/registration-page/regist
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { OneTimeCodeInputComponent } from './components/one-time-code-input/one-time-code-input.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
-  declarations: [AppComponent, LoginPageComponent, RegistrationPageComponent, DashboardComponent],
+  declarations: [
+    AppComponent,
+    LoginPageComponent,
+    RegistrationPageComponent,
+    DashboardComponent,
+    OneTimeCodeInputComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    NgOptimizedImage,
   ],
   providers: [],
   bootstrap: [AppComponent],

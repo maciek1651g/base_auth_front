@@ -1,0 +1,9 @@
+<div class="one-time-code-input">
+  <input
+    type="text"
+    placeholder="Kod jednorazowy"
+    [(ngModel)]="code"
+    (keyup.enter)="submitCode()"
+  />
+  <button (click)="submitCode()">Potwierdź</button>
+</div>

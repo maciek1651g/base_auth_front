@@ -1,6 +1,12 @@
 <div class="dashboard">
   <h2>Zalogowano</h2>
   <button (click)="logout()">Wyloguj</button>
-  <button (click)="generateOTP()">Generuj kod jednorazowy</button>
-  <button (click)="u2fAuthentication()">Autoryzacja U2F</button>
+  <button (click)="registerOTP()">Włącz weryfikację dwuetapową</button>
+  <button (click)="u2fRegistration()">
+    Włącz uwierzytelnianie za pomocą klucza U2F
+  </button>
+  <button (click)="u2fVerification()">
+    Uwierzytelnij za pomocą klucza U2F
+  </button>
+  <img [src]="imageData" alt="Obraz" />
 </div>
