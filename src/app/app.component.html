@@ -1,4 +1,12 @@
-<app-login-page></app-login-page>
-<app-registration-page></app-registration-page>
-<app-dashboard></app-dashboard>
-<app-one-time-code-input></app-one-time-code-input>
+<ng-container *ngIf="!httpService.isLoggedIn">
+    <ng-container *ngIf="loginPage">
+        <app-login-page (registerButtonClicked)="loginPage = !loginPage"></app-login-page>
+    </ng-container>
+    <ng-container *ngIf="!loginPage">
+        <app-registration-page (loginButtonClicked)="loginPage = !loginPage"></app-registration-page>
+    </ng-container>
+</ng-container>
+<ng-container *ngIf="httpService.isLoggedIn">
+    <app-dashboard></app-dashboard>
+</ng-container>
+<p-toast></p-toast>

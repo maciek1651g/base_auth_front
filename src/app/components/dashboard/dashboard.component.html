@@ -1,12 +1,30 @@
 <div class="dashboard">
-  <h2>Zalogowano</h2>
-  <button (click)="logout()">Wyloguj</button>
-  <button (click)="registerOTP()">Włącz weryfikację dwuetapową</button>
-  <button (click)="u2fRegistration()">
-    Włącz uwierzytelnianie za pomocą klucza U2F
-  </button>
-  <button (click)="u2fVerification()">
-    Uwierzytelnij za pomocą klucza U2F
-  </button>
-  <img [src]="imageData" alt="Obraz" />
+    <h2>Zalogowano</h2>
+    <p-button (click)="logout()" label="Wyloguj"></p-button>
+    <p-button *ngIf="!isOtpEnabled" (click)="registerOTP()" label="Włącz weryfikację dwuetapową"></p-button>
+    <p-button *ngIf="isOtpEnabled && !checkOtp" (click)="checkOtp = !checkOtp" label="Podaj OTP"></p-button>
+    <p-button
+        *ngIf="!isU2FEnabled"
+        (click)="u2fRegistration()"
+        [loading]="isU2FLoading"
+        label="Włącz uwierzytelnianie za pomocą klucza U2F"
+    >
+    </p-button>
+    <p-button
+        *ngIf="isU2FEnabled"
+        (click)="u2fVerification()"
+        [loading]="isU2FLoading"
+        label="Uwierzytelnij za pomocą klucza U2F"
+    >
+    </p-button>
+    <ng-container *ngIf="imageData">
+        <p>Zeskanuj kod QR i podaj wygenerowany kod</p>
+        <img [src]="imageData" alt="Obraz" />
+        <app-one-time-code-input (OTPVerified)="OtpVerified($event)"></app-one-time-code-input>
+    </ng-container>
+    <ng-container *ngIf="checkOtp">
+        <app-one-time-code-input
+            (OTPVerified)="$event ? (checkOtp = !checkOtp) : (checkOtp = checkOtp)"
+        ></app-one-time-code-input>
+    </ng-container>
 </div>

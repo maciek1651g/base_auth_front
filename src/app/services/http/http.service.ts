@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { startRegistration, browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
 
 @Injectable({
@@ -14,6 +14,10 @@ export class HttpService {
         if (!browserSupportsWebAuthn()) {
             console.log('It seems this browser does not support WebAuthn...');
         }
+    }
+
+    get isLoggedIn(): boolean {
+        return !!this.token;
     }
 
     login(email: string, password: string) {
@@ -52,12 +56,15 @@ export class HttpService {
 
     registerU2FStart() {
         const userId = this.token;
-        this.http.post(`${this.apiUrl}/registerU2Fstart`, { userId }).subscribe((resp: any) => {
-            console.log(resp);
+        return new Observable((observer) => {
+            this.http.post(`${this.apiUrl}/registerU2Fstart`, { userId }).subscribe((resp: any) => {
+                console.log(resp);
 
-            startRegistration(resp).then((attResp: any) => {
-                this.registerU2FEnd(attResp).subscribe((registrationResult) => {
-                    console.log(registrationResult);
+                startRegistration(resp).then((attResp: any) => {
+                    this.registerU2FEnd(attResp).subscribe((registrationResult) => {
+                        observer.next(registrationResult); // Emituj wartość registrationResult
+                        observer.complete(); // Zakończ obserwację
+                    });
                 });
             });
         });
@@ -73,12 +80,15 @@ export class HttpService {
 
     verifyU2Start() {
         const userId = this.token;
-        return this.http.post(`${this.apiUrl}/verifyU2Fstart`, { userId }).subscribe((resp: any) => {
-            console.log(resp);
+        return new Observable((observer) => {
+            this.http.post(`${this.apiUrl}/verifyU2Fstart`, { userId }).subscribe((resp: any) => {
+                console.log(resp);
 
-            startAuthentication(resp).then((authResp: any) => {
-                this.verifyU2End(authResp).subscribe((verificationResult) => {
-                    console.log(verificationResult);
+                startAuthentication(resp).then((authResp: any) => {
+                    this.verifyU2End(authResp).subscribe((verificationResult) => {
+                        observer.next(verificationResult); // Emituj wartość verificationResult
+                        observer.complete(); // Zakończ obserwację
+                    });
                 });
             });
         });

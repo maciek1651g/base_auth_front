@@ -10,24 +10,31 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { OneTimeCodeInputComponent } from './components/one-time-code-input/one-time-code-input.component';
 import { NgOptimizedImage } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginPageComponent,
-    RegistrationPageComponent,
-    DashboardComponent,
-    OneTimeCodeInputComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    NgOptimizedImage,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        LoginPageComponent,
+        RegistrationPageComponent,
+        DashboardComponent,
+        OneTimeCodeInputComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        NgOptimizedImage,
+        ToastModule,
+        ButtonModule,
+    ],
+    providers: [MessageService],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

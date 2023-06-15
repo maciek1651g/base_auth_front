@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import { HttpService } from './services/http/http.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
 })
-export class AppComponent {}
+export class AppComponent {
+    loginPage = true;
+
+    constructor(public httpService: HttpService) {}
+}

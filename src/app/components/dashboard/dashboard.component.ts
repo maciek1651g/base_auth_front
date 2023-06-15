@@ -1,34 +1,92 @@
 import { Component } from '@angular/core';
-import { HttpService } from '../../http.service';
+import { HttpService } from '../../services/http/http.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  imageData: string | undefined;
+    imageData: string | undefined;
+    isOtpEnabled = false;
+    checkOtp = false;
+    isU2FEnabled = false;
 
-  constructor(private httpService: HttpService) {}
+    isU2FLoading = false;
 
-  logout() {
-    this.httpService.logout().subscribe((response: any) => {
-      console.log(response);
-    });
-  }
+    constructor(private httpService: HttpService, private messageService: MessageService) {}
 
-  registerOTP() {
-    this.httpService.registerOTP().subscribe((response: any) => {
-      this.imageData = response.imageData;
-      console.log(response);
-    });
-  }
+    logout() {
+        this.httpService.logout().subscribe((response: any) => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logged out' });
+            console.log(response);
+        });
+    }
 
-  u2fRegistration() {
-    this.httpService.registerU2FStart();
-  }
+    registerOTP() {
+        this.httpService.registerOTP().subscribe({
+            next: (response: any) => {
+                this.imageData = response.imageData;
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'OTP registered' });
+                console.log(response);
+            },
+            error: (error: any) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `OTP registration failed. ${error.error}`,
+                });
+                console.log(error);
+            },
+        });
+    }
 
-  u2fVerification() {
-    this.httpService.verifyU2Start();
-  }
+    OtpVerified(verified: boolean) {
+        if (verified) {
+            this.isOtpEnabled = true;
+            this.imageData = undefined;
+        }
+    }
+
+    u2fRegistration() {
+        this.isU2FLoading = true;
+        this.httpService.registerU2FStart().subscribe({
+            next: (response: any) => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'U2F registered' });
+                this.isU2FEnabled = true;
+                this.isU2FLoading = false;
+                console.log(response);
+            },
+            error: (error: any) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `U2F registration failed. ${error.error}`,
+                });
+                this.isU2FLoading = false;
+                console.log(error);
+            },
+        });
+    }
+
+    u2fVerification() {
+        this.isU2FLoading = true;
+        this.httpService.verifyU2Start().subscribe({
+            next: (response: any) => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'U2F verified' });
+                this.isU2FLoading = false;
+                console.log(response);
+            },
+            error: (error: any) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `U2F verification failed. ${error.error}`,
+                });
+                this.isU2FLoading = false;
+                console.log(error);
+            },
+        });
+    }
 }

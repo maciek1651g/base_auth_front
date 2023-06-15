@@ -1,18 +1,9 @@
 <div class="container">
-  <h2>Logowanie</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <input
-      type="text"
-      name="email"
-      placeholder="Email"
-      formControlName="email"
-    />
-    <input
-      type="password"
-      name="password"
-      placeholder="Hasło"
-      formControlName="password"
-    />
-    <input type="submit" value="Zaloguj się" />
-  </form>
+    <h2>Logowanie</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <input type="text" name="email" placeholder="Email" formControlName="email" />
+        <input type="password" name="password" placeholder="Hasło" formControlName="password" />
+        <p-button [style]="{ width: '100%' }" [loading]="isLoadingButton" type="submit" label="Zaloguj się"></p-button>
+    </form>
+    <p-button styleClass="p-button-link" label="Zarejestruj się" (click)="registerButtonClicked.emit()"></p-button>
 </div>
