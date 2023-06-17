@@ -60,12 +60,17 @@ export class HttpService {
             this.http.post(`${this.apiUrl}/registerU2Fstart`, { userId }).subscribe((resp: any) => {
                 console.log(resp);
 
-                startRegistration(resp).then((attResp: any) => {
-                    this.registerU2FEnd(attResp).subscribe((registrationResult) => {
-                        observer.next(registrationResult); // Emituj wartość registrationResult
+                startRegistration(resp)
+                    .then((attResp: any) => {
+                        this.registerU2FEnd(attResp).subscribe((registrationResult) => {
+                            observer.next(registrationResult); // Emituj wartość registrationResult
+                            observer.complete(); // Zakończ obserwację
+                        });
+                    })
+                    .catch((error) => {
+                        observer.error(error); // Emituj błąd
                         observer.complete(); // Zakończ obserwację
                     });
-                });
             });
         });
     }
@@ -84,12 +89,17 @@ export class HttpService {
             this.http.post(`${this.apiUrl}/verifyU2Fstart`, { userId }).subscribe((resp: any) => {
                 console.log(resp);
 
-                startAuthentication(resp).then((authResp: any) => {
-                    this.verifyU2End(authResp).subscribe((verificationResult) => {
-                        observer.next(verificationResult); // Emituj wartość verificationResult
+                startAuthentication(resp)
+                    .then((authResp: any) => {
+                        this.verifyU2End(authResp).subscribe((verificationResult) => {
+                            observer.next(verificationResult); // Emituj wartość verificationResult
+                            observer.complete(); // Zakończ obserwację
+                        });
+                    })
+                    .catch((error) => {
+                        observer.error(error); // Emituj błąd
                         observer.complete(); // Zakończ obserwację
                     });
-                });
             });
         });
     }
